@@ -6,11 +6,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.get("/login", cors(), (req, res) => {
+app.get("/", cors(), (req, res) => {
   res.header("Access-Control-Allow-Origin");
 });
 
-app.post("/login", async (req, res) => {
+app.post("/", async (req, res) => {
   const { username, password } = req.body;
   try {
     const check = await collection.findOne({ username: username });
@@ -45,10 +45,7 @@ app.post("/signup", async (req, res) => {
     res.json("fail");
   }
 });
-app.use("/", (req, res) => {
-  res.status(300).send("Hello JavaTpoint!");
-});
 
-app.listen(3456, () => {
+app.listen(8000, () => {
   console.log("port connected");
 });

@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Routes,
-  Route,
-  useNavigate,
-  useLocation,
-  useHistory,
-} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 function Login() {
@@ -23,9 +17,9 @@ function Login() {
           password,
         })
         .then((res) => {
-          if (res.data == "exist") {
+          if (res.data === "exist") {
             navigate("/download", { state: { id: username } });
-          } else if (res.data == "notexist") {
+          } else if (res.data === "notexist") {
             alert("User have not sign up");
           }
         })

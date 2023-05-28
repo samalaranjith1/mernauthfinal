@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../App.css";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Signup = () => {
@@ -34,12 +34,12 @@ const Signup = () => {
             password,
           })
           .then((res) => {
-            if (res.data == "exit") {
+            if (res.data === "exit") {
               alert("User already exits , please login");
-              navigate("/login", { state: data });
-            } else if (res.data == "notexit") {
+              navigate("/", { state: data });
+            } else if (res.data === "notexit") {
               alert("User registration successful, please login");
-              navigate("/login", { state: data });
+              navigate("/", { state: data });
             }
           })
           .catch((error) => {
@@ -49,7 +49,7 @@ const Signup = () => {
       } catch (error) {
         console.log("Error occured signup catch block" + error);
       }
-      navigate("/login", { state: data });
+      navigate("/", { state: data });
     }
   }
   const navigate = useNavigate("");
