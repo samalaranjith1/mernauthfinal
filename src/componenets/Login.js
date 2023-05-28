@@ -50,33 +50,3 @@ function Login() {
 }
 
 export default Login;
-
-async function submit(e){
-        e.preventDefault();
-
-        try{
-
-            await axios.post("http://localhost:8000/",{
-                email,password
-            })
-            .then(res=>{
-                if(res.data=="exist"){
-                    history("/home",{state:{id:email}})
-                }
-                else if(res.data=="notexist"){
-                    alert("User have not sign up")
-                }
-            })
-            .catch(e=>{
-                alert("wrong details")
-                console.log(e);
-            })
-
-        }
-        catch(e){
-            console.log(e);
-
-        }
-
-    }
-
