@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../App.css";
 import { Routes, Route, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Signup = () => {
   const [username, setUsername] = useState("");
@@ -8,7 +9,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (
       username &&
@@ -24,9 +25,33 @@ const Signup = () => {
         confirmPassword,
       });
       const data = { username, password };
+
+      try {
+        await axios
+          .post("http://localhost:8000/signup", {
+            username,
+            email,
+            password,
+          })
+          .then((res) => {
+            if (res.data == "exit") {
+              alert("User already exits , please login");
+              navigate("/login", { state: data });
+            } else if (res.data == "notexit") {
+              alert("User registration successful, please login");
+              navigate("/login", { state: data });
+            }
+          })
+          .catch((error) => {
+            alert("wrong details");
+            console.log(error);
+          });
+      } catch (error) {
+        console.log("Error occured signup catch block" + error);
+      }
       navigate("/login", { state: data });
     }
-  };
+  }
   const navigate = useNavigate("");
 
   const handleLogin = (e) => {
@@ -34,7 +59,7 @@ const Signup = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} action="POST">
       <label>
         Username:
         <br />
