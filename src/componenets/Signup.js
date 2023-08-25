@@ -8,6 +8,7 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const data = { username, email, password };
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -24,11 +25,10 @@ const Signup = () => {
         password,
         confirmPassword,
       });
-      const data = { username, password };
 
       try {
         await axios
-          .post("http://localhost:8000/signup", {
+          .post("http://localhost:8000/signup/", {
             username,
             email,
             password,
@@ -36,7 +36,7 @@ const Signup = () => {
           .then((res) => {
             if (res.data === "exit") {
               alert("User already exits , please login");
-              navigate("/", { state: data });
+              navigate("/login", { state: data });
             } else if (res.data === "notexit") {
               alert("User registration successful, please login");
               navigate("/", { state: data });
@@ -49,7 +49,7 @@ const Signup = () => {
       } catch (error) {
         console.log("Error occured signup catch block" + error);
       }
-      navigate("/", { state: data });
+      navigate("/login", { state: data });
     }
   }
   const navigate = useNavigate("");

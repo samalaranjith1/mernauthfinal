@@ -1,17 +1,62 @@
-const express = require("express")();
-const collection = require("./mongo");
-const cors = require("cors");
+const { MongoClient } = require("mongodb");
+const express = require("express");
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+const cors = require("cors");
+const collection = require("./mongo");
 
-app.get("/", cors(), (req, res) => {
-  res.header("Access-Control-Allow-Origin");
+app.use(cors());
+app.use(express.json());
+const uri =
+  "mongodb+srv://samalaranjith1:Ranjith1956@cluster0.r3efdtw.mongodb.net/users?retryWrites=true&w=majority";
+const client = new MongoClient(uri);
+
+async function main() {
+  try {
+    await client.connect();
+    await createListing(client, {
+      username: "ranjithsamala",
+      email: "ranjit1h@gmail.com",
+      password: "ranjith@gmail.com",
+    });
+  } finally {
+    await client.close();
+  }
+}
+
+main().catch(console.error);
+
+const createListing = async (client, newListing) => {
+  const result = await client
+    .db("usersDB")
+    .collection("users")
+    .insertOne(newListing);
+
+  console.log(
+    await client
+      .db("usersDB")
+      .collection("users")
+      .findOne({ email: `ranjit1h@gmail.com` })
+  );
+  console.log(
+    `New listing created with the following id: ${result.insertedId}`
+  );
+};
+
+//new code
+app.listen(8000, () => {
+  console.log("connected via port 8000");
 });
 
-app.post("/", async (req, res) => {
+app.get("/signup", (req, res) => {
+  res.render("signup");
+});
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+app.post("/login", async (req, res) => {
   const { username, password } = req.body;
+  console.log(req.body);
   try {
     const check = await collection.findOne({ username: username });
     if (check) {
@@ -44,8 +89,4 @@ app.post("/signup", async (req, res) => {
   } catch (e) {
     res.json("fail");
   }
-});
-
-app.listen(8000, () => {
-  console.log("port connected");
 });

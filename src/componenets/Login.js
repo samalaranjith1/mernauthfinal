@@ -12,7 +12,7 @@ function Login() {
     console.log("Login Successful");
     try {
       await axios
-        .post("http://localhost:8000/login", {
+        .post("http://localhost:8000/login/", {
           username,
           password,
         })
